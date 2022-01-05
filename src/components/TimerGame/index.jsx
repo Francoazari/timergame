@@ -55,9 +55,9 @@ const TimerGame = () => {
 
     const increseTimer = (e) => {
         if (e.target.className.includes("lastPress")) return;
-        let seconds = model.defaultValues.increaseValues.minutes * 60;
         increaserBlock.current = e.target.id;
 
+        let seconds = model.defaultValues.increaseValues.minutes * 60;
         if(isRunning) {
             setTimeCurrently(timeCurrently + seconds);
             countRef.current.value++;

@@ -29,7 +29,7 @@ const Timer = ({editable, timeCurrently, initialTime, onSetInitialTime, onSetEdi
     }
 
     const validateInput = e => {
-        //if (e.which < 48 || e.which > 57 || e.target.value.length > 1) e.preventDefault();
+        if (e.which < 48 || e.which > 57 || e.target.value.length > 1) e.preventDefault();
     }
 
     useEffect(() => {
