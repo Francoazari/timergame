@@ -1,41 +1,40 @@
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import className from "../../../shared/classname";
 import styles from "../TimerGame.module.scss";
+import TimeService from "../../../services/TimeService";
 
-const getMinutes = seconds => Math.floor(seconds / 60);
-const getSeconds = seconds => Math.floor(seconds % 60);
-const formatNumber = num => {
-    num = parseInt(num);
-    return (num >= 0 && num < 10) ? `0${num}` : num ;
-} 
+const error = Object.freeze({ MINUTE: "minute", SECOND: "second", BOTH: "both" });
+
 
 
 const Timer = ({editable, timeCurrently, initialTime, onSetInitialTime, onSetEditable}) => {
 
     const minutesRef = useRef();
     const secondsRef = useRef();
-    const saveErrorRef = useRef(false);
+    const [hasError, setHasError] = useState();
 
     const saveTime = () => {
 
-        const minute = parseInt(formatNumber(minutesRef.current.value));
-        const second = parseInt(formatNumber(secondsRef.current.value));
+        const minute = parseInt(TimeService.formatNumber(minutesRef.current.value));
+        const second = parseInt(TimeService.formatNumber(secondsRef.current.value));
 
-        if(
-            (minute === 0 && second === 0) || minute < 0 || second < 0
-        ) {
-            saveErrorRef.current = true;
-            return;
+        let validateErrors = TimeService.validateMinutesAndSeconds(minute, second);
+
+        if(!validateErrors){
+            onSetInitialTime(TimeService.convertSecondsToMinutes(minute, second));
+            onSetEditable(editable => !editable);
+        }else{
+            setHasError(validateErrors);
         }
+    }
 
-        onSetInitialTime({minute, second});
-        onSetEditable(editable => !editable);
-
+    const validateInput = e => {
+        //if (e.which < 48 || e.which > 57 || e.target.value.length > 1) e.preventDefault();
     }
 
     useEffect(() => {
-        if (minutesRef.current) minutesRef.current.value = formatNumber(initialTime.minute);
-        if (secondsRef.current) secondsRef.current.value = formatNumber(initialTime.second);
+        if (minutesRef.current) minutesRef.current.value = TimeService.formatNumber(initialTime.minute);
+        if (secondsRef.current) secondsRef.current.value = TimeService.formatNumber(initialTime.second);
     }, [editable, initialTime.minute, initialTime.second])
 
     return (
@@ -46,17 +45,19 @@ const Timer = ({editable, timeCurrently, initialTime, onSetInitialTime, onSetEdi
                     <div className={styles.minutes}>
                         {editable 
                         ?   <input
-                                className={styles.inputTimer}
+                                {...className(
+                                    styles.inputTimer,
+                                    {[styles.hasError]: hasError === error.BOTH || hasError === error.MINUTE})
+                                }
                                 ref={minutesRef}
                                 name="minute"
                                 type="number"
-                                maxLength="2"
                                 max="99"
                                 min="00"
                                 disabled={!editable}
-                                //onBlur={handleBlurInput}
+                                onKeyPress={validateInput}
                             />
-                        :   <p>{formatNumber(getMinutes(timeCurrently))}</p>
+                        :   <p>{TimeService.formatNumber(TimeService.getMinutes(timeCurrently))}</p>
                         }
                     </div>
 
@@ -66,17 +67,19 @@ const Timer = ({editable, timeCurrently, initialTime, onSetInitialTime, onSetEdi
                     
                         {editable 
                         ?   <input
-                                className={styles.inputTimer}
+                                {...className(
+                                    styles.inputTimer,
+                                    {[styles.hasError]: hasError === error.BOTH || hasError === error.SECOND })
+                                }
                                 ref={secondsRef}                        
                                 name="second"
                                 type="number"
-                                maxLength="2"
                                 max="59"
                                 min="00"
                                 disabled={!editable}
-                                //onBlur={handleBlurInput}
+                                onKeyPress={validateInput}
                             />
-                        :   <p>{formatNumber(getSeconds(timeCurrently))}</p>
+                        :   <p>{TimeService.formatNumber(TimeService.getSeconds(timeCurrently))}</p>
                         }
 
                     </div>
@@ -86,9 +89,8 @@ const Timer = ({editable, timeCurrently, initialTime, onSetInitialTime, onSetEdi
                 <button 
                     {...className(
                         styles.save,
-                        {[styles.saveError]: saveErrorRef.current.value})
+                        {[styles.hasError]: hasError})
                     }
-                    className={styles.save} 
                     onClick={() => saveTime()}
 
                 >

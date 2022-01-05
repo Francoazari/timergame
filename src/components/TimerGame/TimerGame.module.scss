@@ -37,19 +37,15 @@ body,
   justify-content: flex-end;
 
   p {
-    color: var(--increaseTimerColorLeft, $white);
+    color: #108600;
     //font-family: "bebas";
     font-size: 5em;
     padding: 25px;
     font-weight: bold;
-    transition: color 0.3s linear;
+    transition: color 0.1s linear;
 
-    .lastPress {
+    &.lastPress {
       color: #990000;
-    }
-
-    &:hover {
-      //color: #108600;
     }
   }
 }
@@ -62,19 +58,15 @@ body,
   color: var(--increaseTimerColorRight, $ms-color-blueLight);
 
   p {
-    color: var(--increaseTimerColorRight, $white);
+    color: #108600;
     //font-family: "bebas";
     font-size: 5em;
     padding: 25px;
     font-weight: bold;
-    transition: color 0.3s linear;
+    transition: color 0.1s linear;
 
-    .lastPress {
+    &.lastPress {
       color: #990000;
-    }
-
-    &:hover {
-      //color: #108600;
     }
   }
 }
@@ -195,6 +187,10 @@ body,
   &:disabled {
     border-bottom: none;
   }
+
+  &.hasError {
+    color: #cf0f0f;
+  }
 }
 
 .inputTimer::-webkit-outer-spin-button,
@@ -221,8 +217,8 @@ body,
     opacity: 1;
   }
 
-  .saveError {
-    color: #900a0a;
+  &.hasError {
+    color: #cf0f0f;
   }
 }
 

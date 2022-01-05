@@ -5,53 +5,50 @@ import ButtonStartStop from "./ButtonStartStop";
 import Timer from "./Timer";
 import useInterval from "../../hooks/useInterval";
 import className from "../../shared/classname";
+import TimeService from "../../services/TimeService";
 const buttonIncreaser = Object.freeze({ LEFT: "increase-left", RIGHT: "increase-right" });
 
-export const convertAllToSeconds = (minutes, seconds) => seconds += minutes * 60;
-
-const TimerGame = () => {
-
-    const model = {
-        defaultValues: {
-            minute: 4,
-            second: 0,
-            intervalDelay: 15,
-            increaseValues: {
-                minutes: 1
-            },
-            backgroundSeconds: {
-                stop: 5,
-                warning: 90
-            },
-            backgroundColor: {
-                default: "#55C6EE", 
-                warning: "#e9e906",
-                stop: "#b92523" 
-            }
+const model = {
+    defaultValues: {
+        minute: 4,
+        second: 0,
+        intervalDelay: 15,
+        increaseValues: {
+            minutes: 1
+        },
+        backgroundSeconds: {
+            stop: 5,
+            warning: 90
+        },
+        backgroundColor: {
+            default: "#55C6EE", 
+            warning: "#e9e906",
+            stop: "#b92523" 
         }
     }
+}
+
+const TimerGame = () => {   
 
     const [editable, setEditable] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
     const [initialTime, setInitialTime] = useState({minute: model.defaultValues.minute, second: model.defaultValues.second});
-    const [timeCurrently, setTimeCurrently] = useState(convertAllToSeconds(initialTime.minute, initialTime.second));
+    const [timeCurrently, setTimeCurrently] = useState(TimeService.convertAllToSeconds(initialTime.minute, initialTime.second));
     const countRef = useRef(0);
     const increaserBlock = useRef();
     let backgroundColor = model.defaultValues.backgroundColor.default;
-    let increaseTimerColorRight = "black";
-    let increaseTimerColorLeft = "black";
 
     useEffect(() => {
         countRef.current.value = 0;
     }, []);
 
     useEffect(() => {
-        setTimeCurrently(convertAllToSeconds(initialTime.minute, initialTime.second));
+        setTimeCurrently(TimeService.convertAllToSeconds(initialTime.minute, initialTime.second));
     }, [initialTime]);
 
     const resetTimer = () => {
         setIsRunning(false);
-        setTimeCurrently(convertAllToSeconds(initialTime.minute, initialTime.second));
+        setTimeCurrently(TimeService.convertAllToSeconds(initialTime.minute, initialTime.second));
         countRef.current.value = 0;
         increaserBlock.current = null;
     }
@@ -60,17 +57,6 @@ const TimerGame = () => {
         if (e.target.className.includes("lastPress")) return;
         let seconds = model.defaultValues.increaseValues.minutes * 60;
         increaserBlock.current = e.target.id;
-
-        console.log(increaserBlock.current);
-        console.log(e.target.id);
-
-        if(e.target.id === buttonIncreaser.RIGHT) {
-            increaseTimerColorRight = "#990000";
-            increaseTimerColorLeft = "#108600";
-        } else {
-            increaseTimerColorLeft = "#990000";
-            increaseTimerColorRight = "#108600";
-        }        
 
         if(isRunning) {
             setTimeCurrently(timeCurrently + seconds);
@@ -105,9 +91,6 @@ const TimerGame = () => {
                     <p 
                         id={buttonIncreaser.LEFT}
                         {...className({[styles.lastPress]:(increaserBlock.current === buttonIncreaser.LEFT)})}
-                        style={{
-                            "--increaseTimerColorLeft": increaseTimerColorLeft 
-                        }}
                         onClick={e => {increseTimer(e)}}
                     >
                         {model.defaultValues.increaseValues.minutes + '+'}
@@ -160,13 +143,13 @@ const TimerGame = () => {
                                 isRunning = {isRunning}
                                 setIsRunning = {setIsRunning}
                                 currentTime={timeCurrently}
-                                initialTime={convertAllToSeconds(initialTime.minute, initialTime.second)}
+                                initialTime={TimeService.convertAllToSeconds(initialTime.minute, initialTime.second)}
                                 handleStop={resetTimer}
                                 editable={editable}
                                 //saveTime={saveTime}
                             />
 
-                            { !editable && !isRunning && timeCurrently === convertAllToSeconds(initialTime.minute, initialTime.second) &&
+                            { !editable && !isRunning && timeCurrently === TimeService.convertAllToSeconds(initialTime.minute, initialTime.second) &&
                                 <button className={styles.settings} onClick={() => setEditable(editable => !editable)}> 
                                     <img src={gear} alt="Settings" />
                                 </button>
@@ -186,9 +169,6 @@ const TimerGame = () => {
                                 [styles.lastPress]: increaserBlock.current === buttonIncreaser.RIGHT 
                             }
                         )}
-                        style={{
-                            "--increaseTimerColorRight": increaseTimerColorRight
-                        }}
                         onClick={e => {increseTimer(e)}}
                     >
                         {model.defaultValues.increaseValues.minutes + '+'}
