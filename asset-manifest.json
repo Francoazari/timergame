@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/timergame/static/css/main.6b64db07.css",
+    "main.js": "/timergame/static/js/main.1652468d.js",
+    "static/media/bebasneue-book-webfont.woff": "/timergame/static/media/bebasneue-book-webfont.ef7181612dcffaf529b4.woff",
+    "static/media/bebasneue-book-webfont.woff2": "/timergame/static/media/bebasneue-book-webfont.d0dafcc2eb3e497f02fd.woff2",
+    "static/media/gear.svg": "/timergame/static/media/gear.78e97098ec11f8df066e3a037b2850ed.svg",
+    "index.html": "/timergame/index.html",
+    "main.6b64db07.css.map": "/timergame/static/css/main.6b64db07.css.map",
+    "main.1652468d.js.map": "/timergame/static/js/main.1652468d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6b64db07.css",
+    "static/js/main.1652468d.js"
+  ]
+}
