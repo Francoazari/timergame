@@ -1,13 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import styles from "./TimerGame.module.scss";
 import gear from "../../assets/images/gear.svg";
-    
+import ButtonStartStop from "./ButtonStartStop";
 import Timer from "./Timer";
 import useInterval from "../../hooks/useInterval";
 import className from "../../shared/classname";
-import TimeService from "../../services/TimeService";
-import ButtonStartStop from ".//ButtonStartStop";
-
+import { TimeService } from "../../services/TimeService";
 const buttonIncreaser = Object.freeze({ LEFT: "increase-left", RIGHT: "increase-right" });
 
 const model = {
@@ -30,7 +28,7 @@ const model = {
     }
 }
 
-const TimerGame = () => {   
+const Game = () => {   
 
     const [editable, setEditable] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
@@ -182,4 +180,4 @@ const TimerGame = () => {
     );
 };
 
-export default TimerGame;
+export default Game;
