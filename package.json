@@ -18,7 +18,6 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build -r https://$GH_TOKEN@github.com/Francoazari/timergame"
-
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +40,6 @@
   "devDependencies": {
     "gh-pages": "^3.2.3",
     "node-sass": "^7.0.1"
-  }, 
-  "homepage": "https://francoazari.github.com/timergame"
+  },
+  "homepage": "https://francoazari.github.io/timergame"
 }
